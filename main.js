@@ -58,17 +58,27 @@ function knightMoves(startcoord, endcoord) {
     const path = []; // the shortest path to the endcoord
 
     const performAvailableMoves = (coord) => {
+        const makeMove = (x, y) => {
+            let validMove = isValidCoord([coord[0] + x, coord[1] + y]);
+            if (validMove) {
+                console.log(`coord ${[coord[0] + x, coord[1] + y]} is valid`);
+                performAvailableMoves([coord[0] + x, coord[1] + y]);
+            } else {
+                console.log(`coord ${[coord[0] + x, coord[1] + y]} is invalid`)
+            }
+        };
+
         let coordString = coord.join();
 
-        // parents[coordString] = "test";
-
         // check all 8 valid moves
-        let x = 1;
-        let y = 2;
-        if (isValidCoord([coord[0] + x, coord[1] + y])) {
-            console.log(`coord ${[coord[0] + x, coord[1] + y]} is valid`);
-            performAvailableMoves([coord[0] + x, coord[1] + y]);
-        }
+        makeMove(2, 1);
+        makeMove(2, -1);
+        makeMove(1, -2);
+        makeMove(-1, -2);
+        makeMove(-2, -1);
+        makeMove(-2, 1);
+        makeMove(-1, 2);
+        makeMove(1, 2);
     };
 
     /*
