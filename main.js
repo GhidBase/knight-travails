@@ -16,7 +16,7 @@
             DONE - this calls performAvailableMoves() again, from all of the
             available spots for the knight based on it's current location.
 
-            - These moves will need to be added to a queue before executing
+            DONE - These moves will need to be added to a queue before executing
             because we want to perform them depth-first not breadth-first
 
             DONE - we also need to store each of these spots we're visiting to
@@ -59,30 +59,29 @@
 function knightMoves(startcoord, endcoord) {
     const parents = {}; // each coord's parent
     const path = []; // the shortest path to the endcoord
+    const queue = [];
 
     const performAvailableMoves = (coord) => {
-        const makeMove = (x, y) => {
-            let validMove = isValidCoord([coord[0] + x, coord[1] + y]);
-            if (validMove) {
-                let joinCoord = [coord[0] + x, coord[1] + y].join();
-                parents[joinCoord] = coord;
-                performAvailableMoves([coord[0] + x, coord[1] + y]);
-            } else {
-                // console.log(`coord ${[coord[0] + x, coord[1] + y]} is invalid`);
-            }
+        // returns the original array in 0 and the new array in 1
+        const translateCoord = (xy) => {
+            return [coord, [coord[0] + xy[0], coord[1] + xy[1]]];
         };
 
         let coordString = coord.join();
 
+        // if (isValidCoord(coord)) {
         // check all 8 valid moves
-        makeMove(2, 1);
-        makeMove(2, -1);
-        makeMove(1, -2);
-        makeMove(-1, -2);
-        makeMove(-2, -1);
-        makeMove(-2, 1);
-        makeMove(-1, 2);
-        makeMove(1, 2);
+        queue.push(translateCoord([2, 1]));
+        queue.push(translateCoord([2, -1]));
+        queue.push(translateCoord([1, -2]));
+        queue.push(translateCoord([-1, -2]));
+        queue.push(translateCoord([-2, -1]));
+        queue.push(translateCoord([-2, 1]));
+        queue.push(translateCoord([-1, 2]));
+        queue.push(translateCoord([1, 2]));
+        // console.log(queue);
+        // console.log(queue.length);
+        // }
     };
 
     /*
@@ -103,7 +102,32 @@ function knightMoves(startcoord, endcoord) {
         );
     };
 
+    const makeMove = (coords) => {
+        // coords 0 will be the starting coords
+        // coords 1 will be the coords of the move
+        let validMove = isValidCoord(coords[1]);
+        // console.log(validMove)
+        if (validMove) {
+            parents[coords[1].join()] = coords[0];
+            performAvailableMoves(coords[1]);
+            console.log(parents);
+        } else {
+            // console.log(coords[1])
+        }
+    };
+
     performAvailableMoves(startcoord);
+    let levels = 0;
+    console.log(`go through queue`);
+    while (queue.length > 0) {
+        // currentCoords here will be [startcoords, movecoords]
+        // so two pairs of x,y
+        let currentCoords = queue.shift();
+        // console.log(currentCoord);
+        // console.log(isValidCoord(currentCoord[1]));
+        // console.log(currentCoords)
+        makeMove(currentCoords);
+    }
 }
 
 knightMoves([1, 3], [3, 4]);
