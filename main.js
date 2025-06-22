@@ -13,13 +13,16 @@
 
     if startcoord != endcoord
         - need a function performAvailableMoves()
-            - this calls performAvailableMoves() again, from all of the
+            DONE - this calls performAvailableMoves() again, from all of the
             available spots for the knight based on it's current location.
+
             - These moves will need to be added to a queue before executing
             because we want to perform them depth-first not breadth-first
-            - we also need to store each of these spots we're visiting to
+
+            DONE - we also need to store each of these spots we're visiting to
             the parent array as we queue all these up so we have a record
             of what was visited and don't waste moves
+
             - if any of the available spots is the endcoord, don't queue
             up performAvailableMoves() on any of the available spots. Instead,
             add the endcoord to the parent array with the current coord as the
@@ -61,10 +64,11 @@ function knightMoves(startcoord, endcoord) {
         const makeMove = (x, y) => {
             let validMove = isValidCoord([coord[0] + x, coord[1] + y]);
             if (validMove) {
-                console.log(`coord ${[coord[0] + x, coord[1] + y]} is valid`);
+                let joinCoord = [coord[0] + x, coord[1] + y].join();
+                parents[joinCoord] = coord;
                 performAvailableMoves([coord[0] + x, coord[1] + y]);
             } else {
-                console.log(`coord ${[coord[0] + x, coord[1] + y]} is invalid`)
+                // console.log(`coord ${[coord[0] + x, coord[1] + y]} is invalid`);
             }
         };
 
@@ -89,7 +93,14 @@ function knightMoves(startcoord, endcoord) {
     const isValidCoord = (coord) => {
         // if coord doesn't exist in parents
         // if coord doesn't exceed the boundaries (0 - 7)
-        return !parents[coord.join()] && coord[0] <= 7 && coord[1] <= 7;
+
+        return (
+            !parents[coord.join()] &&
+            coord[0] <= 7 &&
+            coord[1] <= 7 &&
+            coord[0] >= 0 &&
+            coord[1] >= 0
+        );
     };
 
     performAvailableMoves(startcoord);
