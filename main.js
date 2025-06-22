@@ -60,6 +60,7 @@ function knightMoves(startcoord, endcoord) {
     const parents = {}; // each coord's parent
     const path = []; // the shortest path to the endcoord
     let queue = [];
+    let found = false;
 
     const performAvailableMoves = (currentCoords, previousCoords) => {
         // returns the original array in 0 and the new array in 1
@@ -70,11 +71,12 @@ function knightMoves(startcoord, endcoord) {
             ];
         };
 
-        // the new block of code
+        // when the coords are found
         if (currentCoords.join() == endcoord.join()) {
             parents[currentCoords.join()] = previousCoords;
             queue = [];
             console.log("found coords");
+            found = true;
             return;
         }
 
@@ -114,23 +116,38 @@ function knightMoves(startcoord, endcoord) {
         let validMove = isValidCoord(coords[1]);
         if (validMove) {
             parents[coords[1].join()] = coords[0];
-            performAvailableMoves(coords[1]);
+            performAvailableMoves(coords[1], coords[0]);
         } else {
-            // console.log(coords[1])
         }
+    };
+
+    const generatePathFromParents = (coords) => {
+        console.log("generatePathFromParents");
+
+        const findStart = (currentCoords) => {
+            path.push(currentCoords);
+            if (parents[currentCoords.join()] == startcoord.join()) {
+                path.push(parents[currentCoords.join()]);
+                console.log(path.reverse());
+            } else {
+                findStart(parents[currentCoords.join()]);
+            }
+        };
+
+        findStart(coords);
     };
 
     performAvailableMoves(startcoord);
     let levels = 0;
-    console.log(`go through queue`);
-    // console.log(queue);
     while (queue.length > 0) {
         // currentCoords here will be [startcoords, movecoords]
         // so two pairs of x,y
         let currentCoords = queue.shift();
         makeMove(currentCoords);
     }
-    console.log(queue);
+    if (found) {
+        generatePathFromParents(endcoord);
+    }
 }
 
-knightMoves([1, 3], [3, 4]);
+knightMoves([1, 3], [7, 7]);
