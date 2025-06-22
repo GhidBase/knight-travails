@@ -53,12 +53,16 @@
         We'll reverse this to get the shortest path.
 */
 
-
 function knightMoves(startcoord, endcoord) {
     const parents = {}; // each coord's parent
     const path = []; // the shortest path to the endcoord
 
     const performAvailableMoves = (coord) => {
+        let coordString = coord.join();
+        parents[coordString] = "test";
+        console.log(parents);
+
+        isValidCoord(coordString);
     };
 
     /*
@@ -66,7 +70,9 @@ function knightMoves(startcoord, endcoord) {
         one that hasn't been used yet, and is within the bounds of
         the chessboard
     */
-    const isValidCoord = (coord) => {};
+    const isValidCoord = (coordString) => {
+        console.log(parents[coordString]);
+    };
 
     performAvailableMoves(startcoord);
 }
