@@ -59,10 +59,16 @@ function knightMoves(startcoord, endcoord) {
 
     const performAvailableMoves = (coord) => {
         let coordString = coord.join();
-        parents[coordString] = "test";
-        console.log(parents);
 
-        isValidCoord(coordString);
+        // parents[coordString] = "test";
+
+        // check all 8 valid moves
+        let x = 1;
+        let y = 2;
+        if (isValidCoord([coord[0] + x, coord[1] + y])) {
+            console.log(`coord ${[coord[0] + x, coord[1] + y]} is valid`);
+            performAvailableMoves([coord[0] + x, coord[1] + y]);
+        }
     };
 
     /*
@@ -70,8 +76,10 @@ function knightMoves(startcoord, endcoord) {
         one that hasn't been used yet, and is within the bounds of
         the chessboard
     */
-    const isValidCoord = (coordString) => {
-        console.log(parents[coordString]);
+    const isValidCoord = (coord) => {
+        // if coord doesn't exist in parents
+        // if coord doesn't exceed the boundaries (0 - 7)
+        return !parents[coord.join()] && coord[0] <= 7 && coord[1] <= 7;
     };
 
     performAvailableMoves(startcoord);
